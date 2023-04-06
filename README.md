@@ -1,6 +1,6 @@
 This app is for math training.
 The screen at startup looks like this.
-![Simulator Screen Shot - iPhone 14 Pro - 2023-04-06 at 16 34 21](https://user-images.githubusercontent.com/48190583/230397407-f1b8b760-1ec8-45ff-8643-33a79e69ea1a.png)
+![Simulator Screen Shot - iPhone 14 Pro - 2023-04-06 at 16 34 21](https://user-images.githubusercontent.com/48190583/230397407-f1b8b760-1ec8-45ff-8643-33a79e69ea1a.png100x100)
 Now we choose what we want to train.
 ![Simulator Screen Shot - iPhone 14 Pro - 2023-04-06 at 16 34 28](https://user-images.githubusercontent.com/48190583/230398479-de194d25-3379-4709-9b0d-141f2e383f75.png)
 Answer correctly, burns green and is awarded 'count'.
