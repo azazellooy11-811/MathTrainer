@@ -14,8 +14,17 @@ enum MathTypes: Int {
 class ViewController: UIViewController {
     //MARK: - IBOutlet
     @IBOutlet var buttonsCollection: [UIButton]!
+    @IBOutlet weak var addCountLabel: UILabel!
+    @IBOutlet weak var subtractCountLabel: UILabel!
+    @IBOutlet weak var multiplyCountLabel: UILabel!
+    @IBOutlet weak var divideCountLabel: UILabel!
+    @IBOutlet weak var totalScoreLabel: UILabel!
     
     //MARK: - Properties
+    var addCount: Int = 0
+    var subtractCount: Int = 0
+    var multiplyCount: Int = 0
+    var divideCount: Int = 0
     private var selectedType: MathTypes = .add
     
     //MARK: - Life cycle
@@ -31,7 +40,13 @@ class ViewController: UIViewController {
         performSegue(withIdentifier: "goToNext", sender: sender)
     }
     
-    @IBAction func unwindAction(unwindSegue: UIStoryboardSegue) { }
+    @IBAction func unwindAction(unwindSegue: UIStoryboardSegue) {
+        addCountLabel.text = String(addCount)
+        subtractCountLabel.text = String(subtractCount)
+        multiplyCountLabel.text = String(multiplyCount)
+        divideCountLabel.text = String(divideCount)
+        totalScoreLabel.text = "Total score: \(addCount + subtractCount + multiplyCount + divideCount)"
+    }
     
     //MARK: - Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

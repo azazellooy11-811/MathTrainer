@@ -12,6 +12,7 @@ final class TrainViewController: UIViewController {
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     @IBOutlet weak var questionLabel: UILabel!
+    @IBOutlet weak var countLabel: UILabel!
     
     //MARK: - Properties
     var type: MathTypes = .add {
@@ -32,11 +33,7 @@ final class TrainViewController: UIViewController {
     private var firstNumber: Int = 0
     private var secondNumber: Int = 0
     private var sign: String = ""
-    private var count: Int = 0 {
-        didSet {
-            print("Count: \(count)")
-        }
-    }
+    private var count: Int = 0
     
     private var correctAnswer: Int {
         switch type {
@@ -58,6 +55,7 @@ final class TrainViewController: UIViewController {
         configureQuestion()
         configureButtons()
     }
+    
     //MARK: - IBActions
     @IBAction func leftAction(_ sender: UIButton) {
         check(correctAnswer: sender.titleLabel?.text ?? "",
@@ -69,6 +67,21 @@ final class TrainViewController: UIViewController {
     }
     
     //MARK: - Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let trainViewController = segue.destination as? ViewController {
+            switch type {
+            case .add:
+                trainViewController.addCount += count
+            case .subtract:
+                trainViewController.subtractCount += count
+            case .multiply:
+                trainViewController.multiplyCount += count
+            case .divide:
+                trainViewController.divideCount += count
+            }
+        }
+    }
+    
     private func configureButtons() {
         let buttonsArray = [leftButton, rightButton]
         
@@ -98,6 +111,16 @@ final class TrainViewController: UIViewController {
     private func configureQuestion() {
         firstNumber = Int.random(in: 1...99)
         secondNumber = Int.random(in: 1...99)
+        if (sign == "/") {
+            repeat {
+                let newFirstNumber = Int.random(in: 1...99)
+                let newSecondNumber = Int.random(in: 1...99)
+                firstNumber = newFirstNumber
+                secondNumber = newSecondNumber
+            } while !(Double(firstNumber).truncatingRemainder(dividingBy: Double(secondNumber)) == 0)
+            
+            questionLabel.text = "\(firstNumber) \(sign) \(secondNumber)="
+        }
         
         questionLabel.text = "\(firstNumber) \(sign) \(secondNumber)="
     }
@@ -124,6 +147,7 @@ final class TrainViewController: UIViewController {
             let isSecondAttempt: Bool = leftButton.backgroundColor == .red ||
             rightButton.backgroundColor == .red
             count += isSecondAttempt ? 0 : 1
+            countLabel.text = "Count: \(count)"
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 self?.configureQuestion()
