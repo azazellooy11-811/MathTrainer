@@ -41,10 +41,22 @@ class ViewController: UIViewController {
     }
     
     @IBAction func unwindAction(unwindSegue: UIStoryboardSegue) {
-        addCountLabel.text = String(addCount)
-        subtractCountLabel.text = String(subtractCount)
-        multiplyCountLabel.text = String(multiplyCount)
-        divideCountLabel.text = String(divideCount)
+        guard let viewContoller = unwindSegue.source as? TrainViewController else { return }
+            switch viewContoller.type {
+            case .add:
+                addCount += viewContoller.count
+                addCountLabel.text = String(addCount)
+            case .subtract:
+                subtractCount += viewContoller.count
+                subtractCountLabel.text = String(subtractCount)
+            case .multiply:
+                multiplyCount += viewContoller.count
+                multiplyCountLabel.text = String(multiplyCount)
+            case .divide:
+                divideCount += viewContoller.count
+                divideCountLabel.text = String(divideCount)
+            }
+        
         totalScoreLabel.text = "Total score: \(addCount + subtractCount + multiplyCount + divideCount)"
     }
     

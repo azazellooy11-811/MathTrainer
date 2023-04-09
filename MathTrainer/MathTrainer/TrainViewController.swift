@@ -33,7 +33,7 @@ final class TrainViewController: UIViewController {
     private var firstNumber: Int = 0
     private var secondNumber: Int = 0
     private var sign: String = ""
-    private var count: Int = 0
+    private(set) var count: Int = 0
     
     private var correctAnswer: Int {
         switch type {
@@ -53,6 +53,7 @@ final class TrainViewController: UIViewController {
         super.viewDidLoad()
         
         configureQuestion()
+        configureShadow()
         configureButtons()
     }
     
@@ -67,34 +68,18 @@ final class TrainViewController: UIViewController {
     }
     
     //MARK: - Methods
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let trainViewController = segue.destination as? ViewController {
-            switch type {
-            case .add:
-                trainViewController.addCount += count
-            case .subtract:
-                trainViewController.subtractCount += count
-            case .multiply:
-                trainViewController.multiplyCount += count
-            case .divide:
-                trainViewController.divideCount += count
-            }
-        }
-    }
-    
-    private func configureButtons() {
-        let buttonsArray = [leftButton, rightButton]
-        
-        buttonsArray.forEach { button in
-            button?.backgroundColor = .systemYellow
-        }
-        
-        buttonsArray.forEach { button in
+    private func configureShadow() {
+        [leftButton, rightButton].forEach { button in
             button?.layer.shadowColor = UIColor.darkGray.cgColor
             button?.layer.shadowOffset = CGSize.init(width: 0, height: 2)
             button?.layer.shadowOpacity = 0.4
             button?.layer.shadowRadius = 3
         }
+    }
+    
+    private func configureButtons() {
+        leftButton.backgroundColor = .systemYellow
+        rightButton.backgroundColor = .systemYellow
         
         let isRightButton: Bool = Bool.random()
         var randomIncorrectAnswer: Int
@@ -109,19 +94,15 @@ final class TrainViewController: UIViewController {
     }
     
     private func configureQuestion() {
-        firstNumber = Int.random(in: 1...99)
-        secondNumber = Int.random(in: 1...99)
         if (sign == "/") {
             repeat {
-                let newFirstNumber = Int.random(in: 1...99)
-                let newSecondNumber = Int.random(in: 1...99)
-                firstNumber = newFirstNumber
-                secondNumber = newSecondNumber
-            } while !(Double(firstNumber).truncatingRemainder(dividingBy: Double(secondNumber)) == 0)
-            
-            questionLabel.text = "\(firstNumber) \(sign) \(secondNumber)="
+                firstNumber = Int.random(in: 1...99)
+                secondNumber = Int.random(in: 1...99)
+            } while firstNumber % secondNumber != 0
+        } else {
+            firstNumber = Int.random(in: 1...99)
+            secondNumber = Int.random(in: 1...99)
         }
-        
         questionLabel.text = "\(firstNumber) \(sign) \(secondNumber)="
     }
     
