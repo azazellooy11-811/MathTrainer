@@ -33,7 +33,13 @@ final class TrainViewController: UIViewController {
     private var firstNumber: Int = 0
     private var secondNumber: Int = 0
     private var sign: String = ""
-    private(set) var count: Int = 0
+    private(set) var count: Int = 0 {
+        didSet {
+            // Сохраняем
+            
+            UserDefaults.standard.setValue(count, forKey: type.key)
+        }
+    }
     
     private var correctAnswer: Int {
         switch type {
@@ -55,6 +61,10 @@ final class TrainViewController: UIViewController {
         configureQuestion()
         configureShadow()
         configureButtons()
+        
+        if let count = UserDefaults.standard.object(forKey: type.key) as? Int {
+            self.count = count
+        }
     }
     
     //MARK: - IBActions
@@ -128,7 +138,10 @@ final class TrainViewController: UIViewController {
             let isSecondAttempt: Bool = leftButton.backgroundColor == .red ||
             rightButton.backgroundColor == .red
             count += isSecondAttempt ? 0 : 1
-            countLabel.text = "Count: \(count)"
+            var currentScore = 0
+            currentScore += isSecondAttempt ? 0 : 1
+            countLabel.text = "Count: \(currentScore)"
+            
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 self?.configureQuestion()
@@ -136,4 +149,9 @@ final class TrainViewController: UIViewController {
             }
         }
     }
+}
+
+// Создаем свое хранилище
+extension UserDefaults {
+    static let container = UserDefaults(suiteName: "container")
 }
